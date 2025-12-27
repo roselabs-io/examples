@@ -1,9 +1,9 @@
 /**
  * Pigeon Basic Example
  *
- * This example shows how to send emails using Pigeon.
+ * This example shows how to use all Pigeon SDK methods.
  *
- * Run with: PIGEON_API_KEY=sk_pigeon_... node index.js
+ * Run with: PIGEON_API_KEY=pk_pigeon_... node index.js
  */
 
 import { Pigeon } from '@roselabs-io/pigeon';
@@ -14,27 +14,61 @@ const pigeon = new Pigeon({
 });
 
 async function main() {
-  console.log('🐦 Pigeon Email Examples\n');
+  console.log('🐦 Pigeon SDK Examples\n');
 
-  // Example 1: Send using a template
-  console.log('1. Sending template email...');
+  // =========================================================================
+  // Templates
+  // =========================================================================
+  console.log('📋 TEMPLATES\n');
+
+  // List all templates
+  console.log('1. Listing templates...');
   try {
-    const result = await pigeon.send({
-      to: 'recipient@example.com',
-      templateId: 'welcome',
-      variables: {
-        name: 'John Doe',
-        company: 'Acme Inc',
-        login_url: 'https://app.example.com/login',
-      },
-    });
-    console.log('   ✓ Template email sent:', result.messageId);
+    const templates = await pigeon.listTemplates();
+    console.log(`   ✓ Found ${templates.length} template(s)`);
+    templates.forEach((t) => console.log(`     - ${t.name} (${t.id})`));
   } catch (error) {
     console.log('   ✗ Error:', error.message);
   }
 
-  // Example 2: Send raw HTML email
-  console.log('\n2. Sending HTML email...');
+  // Get template by name
+  console.log('\n2. Getting template by name...');
+  try {
+    const template = await pigeon.getTemplateByName('welcome');
+    console.log(`   ✓ Template: ${template.name}`);
+    console.log(`     Subject: ${template.subject}`);
+    console.log(`     Variables: ${template.variables?.map((v) => v.name || v).join(', ') || 'none'}`);
+  } catch (error) {
+    console.log('   ✗ Error:', error.message);
+  }
+
+  // =========================================================================
+  // Sending Emails
+  // =========================================================================
+  console.log('\n\n📧 SENDING EMAILS\n');
+
+  // Send using a template name
+  console.log('3. Sending email with template name...');
+  let sentEmailId;
+  try {
+    const result = await pigeon.send({
+      to: 'recipient@example.com',
+      templateName: 'welcome',
+      variables: {
+        name: 'John Doe',
+        company: 'Acme Inc',
+      },
+    });
+    sentEmailId = result.id;
+    console.log(`   ✓ Email queued: ${result.id}`);
+    console.log(`     Status: ${result.status}`);
+    console.log(`     Subject: ${result.subject}`);
+  } catch (error) {
+    console.log('   ✗ Error:', error.message);
+  }
+
+  // Send raw HTML email
+  console.log('\n4. Sending HTML email...');
   try {
     const result = await pigeon.send({
       to: 'recipient@example.com',
@@ -50,46 +84,65 @@ async function main() {
         </div>
       `,
     });
-    console.log('   ✓ HTML email sent:', result.messageId);
+    console.log(`   ✓ Email queued: ${result.id}`);
+    console.log(`     Status: ${result.status}`);
   } catch (error) {
     console.log('   ✗ Error:', error.message);
   }
 
-  // Example 3: Send to multiple recipients
-  console.log('\n3. Sending to multiple recipients...');
-  try {
-    const result = await pigeon.send({
-      to: ['user1@example.com', 'user2@example.com'],
-      subject: 'Team Update',
-      html: '<p>This is a team-wide announcement.</p>',
-    });
-    console.log('   ✓ Batch email sent:', result.messageId);
-  } catch (error) {
-    console.log('   ✗ Error:', error.message);
-  }
-
-  // Example 4: Send with attachments
-  console.log('\n4. Sending with CC and Reply-To...');
+  // Send with reply-to
+  console.log('\n5. Sending with reply-to...');
   try {
     const result = await pigeon.send({
       to: 'recipient@example.com',
-      cc: 'manager@example.com',
       replyTo: 'support@example.com',
       subject: 'Your Invoice',
-      html: '<p>Please find your invoice attached.</p>',
+      html: '<p>Please find your invoice details below.</p>',
     });
-    console.log('   ✓ Email with CC sent:', result.messageId);
+    console.log(`   ✓ Email queued: ${result.id}`);
   } catch (error) {
     console.log('   ✗ Error:', error.message);
   }
 
-  console.log('\n✅ Done! Check your Pigeon dashboard for delivery status.');
+  // =========================================================================
+  // Email History
+  // =========================================================================
+  console.log('\n\n📊 EMAIL HISTORY\n');
+
+  // List sent emails
+  console.log('6. Listing sent emails...');
+  try {
+    const emails = await pigeon.listEmails({ page: 1, pageSize: 5 });
+    console.log(`   ✓ Found ${emails.total} email(s) (showing ${emails.emails.length})`);
+    emails.emails.forEach((e) => {
+      console.log(`     - ${e.subject} → ${e.to.join(', ')} [${e.status}]`);
+    });
+  } catch (error) {
+    console.log('   ✗ Error:', error.message);
+  }
+
+  // Get specific email
+  if (sentEmailId) {
+    console.log('\n7. Getting email details...');
+    try {
+      const email = await pigeon.getEmail(sentEmailId);
+      console.log(`   ✓ Email: ${email.id}`);
+      console.log(`     To: ${email.to.join(', ')}`);
+      console.log(`     Subject: ${email.subject}`);
+      console.log(`     Status: ${email.status}`);
+      console.log(`     Template: ${email.templateName || 'none'}`);
+    } catch (error) {
+      console.log('   ✗ Error:', error.message);
+    }
+  }
+
+  console.log('\n\n✅ Done! Check your Pigeon dashboard for delivery status.');
 }
 
 // Check for API key
 if (!process.env.PIGEON_API_KEY) {
   console.error('❌ PIGEON_API_KEY environment variable is required');
-  console.log('\nUsage: PIGEON_API_KEY=sk_pigeon_... node index.js');
+  console.log('\nUsage: PIGEON_API_KEY=pk_pigeon_... node index.js');
   process.exit(1);
 }
 

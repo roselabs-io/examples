@@ -1,13 +1,12 @@
-# Falcon Python Examples
+# Falcon Python SDK
 
-Error tracking examples for Python applications.
+Error tracking for Python applications.
 
 ## Examples
 
 | Example | Description |
 |:--------|:------------|
 | [fastapi-basic](./fastapi-basic) | FastAPI integration |
-| [flask-basic](./flask-basic) | Flask integration |
 
 ## Installation
 
@@ -50,22 +49,7 @@ async def root():
     return {"message": "Hello World"}
 ```
 
-## Flask Integration
-
-```python
-from flask import Flask
-from roselabs_falcon.integrations.flask import init_falcon
-
-app = Flask(__name__)
-init_falcon(app, api_key="sk_falcon_...", app_name="my-app")
-
-@app.route("/")
-def hello():
-    return "Hello World"
-```
-
 ## Links
 
-- [Full Documentation](https://docs.roselabs.io/falcon/python)
-- [API Reference](https://docs.roselabs.io/falcon/api)
+- [Falcon Dashboard](https://falcon.roselabs.io)
 - [PyPI Package](https://pypi.org/project/roselabs-falcon/)

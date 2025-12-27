@@ -68,7 +68,7 @@ jobs:
       matrix:
         example:
           - falcon-python/fastapi-basic
-          # Add more as they're created
+          - pigeon-python/basic
     steps:
       - uses: actions/checkout@v4
 

@@ -1,14 +1,12 @@
-# Falcon JavaScript Examples
+# Falcon JavaScript SDK
 
-Error tracking examples for Node.js and browser applications.
+Error tracking for Node.js and browser applications.
 
 ## Examples
 
 | Example | Description |
 |:--------|:------------|
 | [express-basic](./express-basic) | Basic Express.js integration |
-| [express-typescript](./express-typescript) | TypeScript Express.js app |
-| [browser](./browser) | Browser-only error tracking |
 
 ## Installation
 
@@ -56,6 +54,5 @@ app.listen(3000);
 
 ## Links
 
-- [Full Documentation](https://docs.roselabs.io/falcon/javascript)
-- [API Reference](https://docs.roselabs.io/falcon/api)
-- [npm Package](https://www.npmjs.com/package/@roselabs-io/falcon)
+- [Falcon Dashboard](https://falcon.roselabs.io)
+- [GitHub Package](https://github.com/roselabs-io/roselabs/pkgs/npm/falcon-js)

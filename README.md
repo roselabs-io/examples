@@ -6,9 +6,10 @@ Official examples for integrating Rose Labs products into your applications.
 
 | Product | Description | Examples |
 |:--------|:------------|:---------|
-| [Falcon](https://roselabs.io/falcon) | Error tracking & uptime monitoring | [falcon-js](./falcon-js), [falcon-python](./falcon-python), [falcon-react](./falcon-react), [falcon-nextjs](./falcon-nextjs) |
-| [Pigeon](https://roselabs.io/pigeon) | Transactional email API | [pigeon-js](./pigeon-js), [pigeon-python](./pigeon-python) |
-| [Sage](https://roselabs.io/sage) | Helpdesk & customer support | [sage-js](./sage-js), [sage-python](./sage-python) |
+| [Falcon](https://falcon.roselabs.io) | Error tracking & uptime monitoring | [falcon-js](./falcon-js), [falcon-python](./falcon-python) |
+| [Pigeon](https://pigeon.roselabs.io) | Transactional email API | [pigeon-js](./pigeon-js), [pigeon-python](./pigeon-python) |
+| [Sage](https://sage.roselabs.io) | Helpdesk & customer support | [sage-js](./sage-js) |
+| [Canary](https://canary.roselabs.io) | Dependency vulnerability scanning | Coming soon |
 
 ## Quick Start
 
@@ -34,7 +35,14 @@ FALCON_API_KEY=sk_falcon_... uvicorn main:app
 ```bash
 cd pigeon-js/basic
 npm install
-PIGEON_API_KEY=sk_pigeon_... node index.js
+PIGEON_API_KEY=pk_pigeon_... node index.js
+```
+
+**Python:**
+```bash
+cd pigeon-python/basic
+pip install -r requirements.txt
+PIGEON_API_KEY=pk_pigeon_... python main.py
 ```
 
 ### Sage (Helpdesk)
@@ -47,20 +55,13 @@ cd sage-js/contact-form
 
 ## Getting API Keys
 
-1. Sign up at [roselabs.io](https://roselabs.io)
-2. Create a team for your product
+1. Sign up at the product dashboard (e.g., [falcon.roselabs.io](https://falcon.roselabs.io))
+2. Create a team for your project
 3. Go to Settings → API Keys
-4. Copy your API key (starts with `sk_`)
-
-## Documentation
-
-- [Falcon Docs](https://docs.roselabs.io/falcon)
-- [Pigeon Docs](https://docs.roselabs.io/pigeon)
-- [Sage Docs](https://docs.roselabs.io/sage)
+4. Copy your API key
 
 ## Support
 
-- [Discord](https://discord.gg/roselabs)
 - [GitHub Issues](https://github.com/roselabs-io/examples/issues)
 - [Email](mailto:support@roselabs.io)
 
