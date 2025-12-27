@@ -30,6 +30,7 @@ module.exports = {
         'pigeon-python',
         'sage-js',
         'sage-python',
+        'ci',
         'deps',
         'release',
       ],
