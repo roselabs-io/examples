@@ -1,0 +1,34 @@
+{
+  "name": "roselabs-examples",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Official examples for integrating Rose Labs products into your applications.",
+  "scripts": {
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roselabs-io/examples.git"
+  },
+  "keywords": [
+    "roselabs",
+    "falcon",
+    "pigeon",
+    "sage",
+    "error-tracking",
+    "email",
+    "helpdesk",
+    "examples"
+  ],
+  "author": "Rose Labs <hello@roselabs.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/roselabs-io/examples/issues"
+  },
+  "homepage": "https://github.com/roselabs-io/examples#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
+    "husky": "^9.1.7"
+  }
+}

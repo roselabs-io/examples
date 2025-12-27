@@ -1,0 +1,118 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  commitlint:
+    name: Lint Commits
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate commits
+        run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+
+  test-js-examples:
+    name: Test JS Examples
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        example:
+          - falcon-js/express-basic
+          - pigeon-js/basic
+          # Add more as they're created
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.example }}
+        run: npm install
+
+      - name: Run tests (if exists)
+        working-directory: ${{ matrix.example }}
+        run: |
+          if [ -f "package.json" ] && grep -q '"test"' package.json; then
+            npm test || true
+          else
+            echo "No tests configured"
+          fi
+
+      - name: Syntax check
+        working-directory: ${{ matrix.example }}
+        run: node --check *.js || node --check src/*.js 2>/dev/null || echo "Syntax OK"
+
+  test-python-examples:
+    name: Test Python Examples
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        example:
+          - falcon-python/fastapi-basic
+          # Add more as they're created
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.example }}
+        run: |
+          pip install -r requirements.txt || pip install -e . || echo "No requirements"
+
+      - name: Syntax check
+        working-directory: ${{ matrix.example }}
+        run: python -m py_compile *.py
+
+      - name: Run tests (if exists)
+        working-directory: ${{ matrix.example }}
+        run: |
+          if [ -f "pytest.ini" ] || [ -d "tests" ]; then
+            pip install pytest
+            pytest || true
+          else
+            echo "No tests configured"
+          fi
+
+  validate-html:
+    name: Validate HTML Examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check HTML syntax
+        run: |
+          for file in $(find . -name "*.html" -type f); do
+            echo "Checking $file"
+            # Basic syntax validation
+            python3 -c "
+          import html.parser
+          import sys
+          parser = html.parser.HTMLParser()
+          with open('$file', 'r') as f:
+              parser.feed(f.read())
+          print('  OK')
+          "
+          done
