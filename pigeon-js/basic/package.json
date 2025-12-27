@@ -1,0 +1,13 @@
+{
+  "name": "pigeon-basic",
+  "version": "1.0.0",
+  "description": "Basic Pigeon email sending example",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@roselabs-io/pigeon": "latest"
+  }
+}

@@ -1,0 +1,3 @@
+roselabs-falcon
+fastapi
+uvicorn[standard]
