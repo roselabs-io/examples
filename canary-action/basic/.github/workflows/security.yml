@@ -1,0 +1,28 @@
+# Example: Canary Security Scan Workflow
+#
+# This workflow scans your dependencies for vulnerabilities on every push and PR.
+# Copy this file to your project's .github/workflows/ directory.
+
+name: Security Scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  canary-scan:
+    name: Dependency Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Scan dependencies
+        uses: roselabs-io/canary-action@v1
+        with:
+          api-key: ${{ secrets.CANARY_API_KEY }}
+          # Fail on high or critical vulnerabilities (default)
+          fail-on: high
