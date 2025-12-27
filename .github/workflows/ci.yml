@@ -35,7 +35,6 @@ jobs:
         example:
           - falcon-js/express-basic
           - pigeon-js/basic
-          # Add more as they're created
     steps:
       - uses: actions/checkout@v4
 
@@ -43,10 +42,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@roselabs-io'
 
       - name: Install dependencies
         working-directory: ${{ matrix.example }}
         run: npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_NPM_TOKEN }}
 
       - name: Run tests (if exists)
         working-directory: ${{ matrix.example }}
@@ -68,7 +71,7 @@ jobs:
       matrix:
         example:
           - falcon-python/fastapi-basic
-          # Add more as they're created
+          - pigeon-python/basic
     steps:
       - uses: actions/checkout@v4
 

@@ -1,6 +1,6 @@
-# Sage JavaScript Examples
+# Sage JavaScript SDK
 
-Helpdesk and contact form examples.
+Helpdesk and contact form integration.
 
 ## Examples
 
@@ -52,6 +52,5 @@ await sage.createTicket({
 
 ## Links
 
-- [Full Documentation](https://docs.roselabs.io/sage/javascript)
-- [Widget Customization](https://docs.roselabs.io/sage/widget)
-- [npm Package](https://www.npmjs.com/package/@roselabs-io/sage)
+- [Sage Dashboard](https://sage.roselabs.io)
+- [GitHub Package](https://github.com/roselabs-io/roselabs/pkgs/npm/sage-js)
