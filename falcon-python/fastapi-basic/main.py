@@ -2,15 +2,15 @@
 Falcon + FastAPI Basic Example
 
 This example shows how to integrate Falcon error tracking
-into a FastAPI application.
+into a FastAPI application using the recommended instrument_fastapi() approach.
 
 Run with: FALCON_API_KEY=sk_falcon_... uvicorn main:app --reload
 """
 
 import os
 from fastapi import FastAPI, HTTPException
-from roselabs_falcon import Falcon
-from roselabs_falcon.integrations.fastapi import FalconMiddleware
+from falcon_sdk import init, capture_exception, set_user, set_context
+from falcon_sdk.fastapi import instrument_fastapi
 
 # Initialize FastAPI
 app = FastAPI(
@@ -18,17 +18,27 @@ app = FastAPI(
     description="Example showing Falcon error tracking integration",
 )
 
-# Add Falcon middleware
-app.add_middleware(
-    FalconMiddleware,
+# Initialize Falcon SDK
+falcon = init(
     api_key=os.environ.get("FALCON_API_KEY"),
     app_name="fastapi-basic-example",
     environment=os.environ.get("ENVIRONMENT", "development"),
     debug=True,  # Enable debug logging (disable in production)
 )
 
-# Get Falcon instance for manual captures
-falcon = Falcon.get_instance()
+# Instrument the app with auto-registration
+# This automatically:
+# - Adds error tracking middleware
+# - Creates /__falcon/health endpoint for uptime monitoring
+# - Creates /__falcon/metrics endpoint for performance metrics
+# - Auto-registers the app with Falcon on first request
+instrument_fastapi(
+    app,
+    falcon,
+    auto_uptime=True,   # Creates health endpoint
+    auto_metrics=True,  # Creates metrics endpoint
+    # base_url="https://api.example.com",  # Optional: explicit URL for production
+)
 
 
 # =============================================================================
@@ -47,6 +57,8 @@ async def root():
             "/manual-error": "Manually captures an error",
             "/async-error": "Triggers an async error",
             "/http-error": "Triggers an HTTP exception",
+            "/__falcon/health": "Health check endpoint (auto-created)",
+            "/__falcon/metrics": "Metrics endpoint (auto-created)",
         },
     }
 
@@ -65,7 +77,7 @@ async def manual_error():
         result = 1 / 0
     except ZeroDivisionError as e:
         # Manually capture the error with additional context
-        falcon.capture_exception(
+        capture_exception(
             e,
             tags={"feature": "calculation"},
             extra={"operation": "division", "numerator": 1, "denominator": 0},
@@ -88,7 +100,7 @@ async def async_error():
 async def http_error():
     """HTTP exception with Falcon context."""
     # Set user context
-    falcon.set_user({"id": "user-123", "email": "test@example.com"})
+    set_user({"id": "user-123", "email": "test@example.com"})
 
     raise HTTPException(status_code=404, detail="Resource not found")
 
@@ -97,7 +109,7 @@ async def http_error():
 async def checkout(user_id: str = None, cart_id: str = None):
     """Endpoint with user context attached to errors."""
     # Add context that will be attached to any errors
-    falcon.set_context(
+    set_context(
         user={"id": user_id},
         tags={"flow": "checkout"},
         extra={"cart_id": cart_id},
@@ -121,11 +133,17 @@ async def startup():
 
 API Key:    {'✓ Set' if api_key else '✗ Missing (set FALCON_API_KEY)'}
 
+Auto-registration enabled:
+  - Health endpoint: /__falcon/health
+  - Metrics endpoint: /__falcon/metrics
+
 Try these endpoints:
   curl http://localhost:8000/
   curl http://localhost:8000/error
   curl http://localhost:8000/manual-error
   curl http://localhost:8000/async-error
+  curl http://localhost:8000/__falcon/health
+  curl http://localhost:8000/__falcon/metrics
   curl -X POST "http://localhost:8000/checkout?user_id=123&cart_id=abc"
 """
     )
