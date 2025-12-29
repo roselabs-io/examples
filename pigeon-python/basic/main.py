@@ -115,12 +115,73 @@ async def main():
         print(f"   ✗ Error: {e}")
 
     # =========================================================================
+    # Batch Sending
+    # =========================================================================
+    print("\n\n📦 BATCH SENDING\n")
+
+    # Send batch with template (personalized for each recipient)
+    print("6. Sending batch with template...")
+    try:
+        batch_result = await pigeon.send_batch(
+            recipients=[
+                {"to": "user1@example.com", "variables": {"name": "Alice"}},
+                {"to": "user2@example.com", "variables": {"name": "Bob"}},
+                {"to": "user3@example.com", "variables": {"name": "Charlie"}},
+            ],
+            template_name="welcome",
+        )
+        print(f"   ✓ Batch complete: {batch_result.queued}/{batch_result.total} queued")
+        if batch_result.suppressed > 0:
+            print(f"     Suppressed: {batch_result.suppressed}")
+        if batch_result.failed > 0:
+            print(f"     Failed: {batch_result.failed}")
+        for r in batch_result.results:
+            status_icon = "✓" if r.status == "queued" else "✗"
+            print(f"     {status_icon} {r.to}: {r.status}")
+    except Exception as e:
+        print(f"   ✗ Error: {e}")
+
+    # Send batch with raw HTML
+    print("\n7. Sending batch with raw HTML...")
+    try:
+        batch_result = await pigeon.send_batch(
+            recipients=[
+                {"to": "newsletter1@example.com"},
+                {"to": "newsletter2@example.com"},
+            ],
+            subject="Monthly Newsletter",
+            html="""
+                <div style="font-family: sans-serif;">
+                    <h1>December Newsletter</h1>
+                    <p>Here's what's new this month...</p>
+                </div>
+            """,
+        )
+        print(f"   ✓ Batch complete: {batch_result.queued}/{batch_result.total} queued")
+    except Exception as e:
+        print(f"   ✗ Error: {e}")
+
+    # Send transactional batch (bypasses suppression list)
+    print("\n8. Sending transactional batch...")
+    try:
+        batch_result = await pigeon.send_batch(
+            recipients=[
+                {"to": "user@example.com", "variables": {"code": "ABC123"}},
+            ],
+            template_name="password-reset",
+            transactional=True,  # Bypasses suppression, no unsubscribe footer
+        )
+        print(f"   ✓ Transactional batch: {batch_result.queued}/{batch_result.total} queued")
+    except Exception as e:
+        print(f"   ✗ Error: {e}")
+
+    # =========================================================================
     # Email History
     # =========================================================================
     print("\n\n📊 EMAIL HISTORY\n")
 
     # List sent emails
-    print("6. Listing sent emails...")
+    print("9. Listing sent emails...")
     try:
         email_list = await pigeon.list_emails(page=1, page_size=5)
         print(f"   ✓ Found {email_list.total} email(s) (showing {len(email_list.emails)})")
@@ -132,7 +193,7 @@ async def main():
 
     # Get specific email
     if sent_email_id:
-        print("\n7. Getting email details...")
+        print("\n10. Getting email details...")
         try:
             email = await pigeon.get_email(sent_email_id)
             print(f"   ✓ Email: {email.id}")
