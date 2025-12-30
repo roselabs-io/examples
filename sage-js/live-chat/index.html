@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sage Live Chat Widget Example</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #1f2937;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #111827;
+    }
+
+    .subtitle {
+      color: #6b7280;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section h2 {
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+      color: #374151;
+    }
+
+    .section p {
+      color: #6b7280;
+      margin-bottom: 15px;
+    }
+
+    code {
+      background: #f3f4f6;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Consolas', monospace;
+      font-size: 0.875rem;
+    }
+
+    pre {
+      background: #1f2937;
+      color: #e5e7eb;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      line-height: 1.7;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    .highlight {
+      background: #fef3c7;
+      padding: 15px 20px;
+      border-radius: 8px;
+      border-left: 4px solid #f59e0b;
+      margin-bottom: 20px;
+    }
+
+    .highlight p {
+      margin: 0;
+      color: #92400e;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .feature {
+      background: #f9fafb;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .feature h3 {
+      font-size: 1rem;
+      margin-bottom: 5px;
+      color: #374151;
+    }
+
+    .feature p {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .chat-hint {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      background: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      animation: bounce 2s infinite;
+    }
+
+    .chat-hint::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      right: 20px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid white;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Sage Live Chat Widget</h1>
+      <p class="subtitle">Embeddable AI-powered live chat for your website</p>
+
+      <div class="highlight">
+        <p><strong>Try it now!</strong> Click the chat bubble in the bottom-right corner to start a conversation.</p>
+      </div>
+
+      <div class="section">
+        <h2>Quick Start</h2>
+        <p>Add this script tag to your website to enable the chat widget:</p>
+        <pre><code>&lt;script
+  src="https://cdn.roselabs.io/sage-chat.min.js"
+  data-sage-api-key="sk_sage_..."
+&gt;&lt;/script&gt;</code></pre>
+      </div>
+
+      <div class="section">
+        <h2>Configuration Options</h2>
+        <p>Customize the widget with data attributes:</p>
+        <pre><code>&lt;script
+  src="https://cdn.roselabs.io/sage-chat.min.js"
+  data-sage-api-key="sk_sage_..."
+  data-sage-color="#6366f1"
+  data-sage-position="bottom-right"
+&gt;&lt;/script&gt;</code></pre>
+      </div>
+
+      <div class="section">
+        <h2>ES Module Usage</h2>
+        <p>For React, Vue, or other frameworks:</p>
+        <pre><code>import { SageChat } from '@roselabs-io/sage/chat';
+
+// Initialize the chat widget
+const chat = SageChat.init({
+  apiKey: 'sk_sage_...',
+  primaryColor: '#6366f1',
+  visitor: {
+    email: 'user@example.com',
+    name: 'John Doe',
+  },
+});
+
+// Control the widget programmatically
+chat.open();
+chat.send('Hello!');
+chat.identify({ email: 'new@email.com' });
+chat.close();
+chat.destroy();</code></pre>
+      </div>
+
+      <div class="section">
+        <h2>Features</h2>
+        <div class="features">
+          <div class="feature">
+            <div class="feature-icon">🤖</div>
+            <h3>AI-Powered</h3>
+            <p>Instant responses using your knowledge base</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">🎨</div>
+            <h3>Customizable</h3>
+            <p>Match your brand colors and style</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">🎫</div>
+            <h3>Ticket Conversion</h3>
+            <p>Seamlessly convert chats to support tickets</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">📱</div>
+            <h3>Responsive</h3>
+            <p>Works great on mobile devices</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-hint">
+    👋 Try the chat widget!
+  </div>
+
+  <!-- Sage Live Chat Widget -->
+  <!-- Replace YOUR_API_KEY with your actual Sage API key (sk_sage_...) -->
+  <script
+    src="https://cdn.roselabs.io/sage-chat.min.js"
+    data-sage-api-key="YOUR_API_KEY"
+    data-sage-color="#667eea"
+  ></script>
+
+  <!-- Hide the hint after widget is opened -->
+  <script>
+    // Hide hint when chat is opened
+    document.addEventListener('sage:open', () => {
+      document.querySelector('.chat-hint').style.display = 'none';
+    });
+
+    // Hide hint after 10 seconds anyway
+    setTimeout(() => {
+      const hint = document.querySelector('.chat-hint');
+      if (hint) {
+        hint.style.opacity = '0';
+        hint.style.transition = 'opacity 0.5s';
+        setTimeout(() => hint.style.display = 'none', 500);
+      }
+    }, 10000);
+  </script>
+</body>
+</html>
