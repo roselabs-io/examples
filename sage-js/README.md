@@ -1,12 +1,13 @@
 # Sage JavaScript SDK
 
-Helpdesk and contact form integration.
+Helpdesk, contact form, and live chat integration.
 
 ## Examples
 
 | Example | Description |
 |:--------|:------------|
 | [contact-form](./contact-form) | Embeddable contact form widget |
+| [live-chat](./live-chat) | AI-powered live chat widget |
 
 ## Installation
 
@@ -14,18 +15,18 @@ Helpdesk and contact form integration.
 npm install @roselabs-io/sage
 ```
 
-Or use the CDN:
+Or use the CDN for the live chat widget:
 
 ```html
-<script src="https://cdn.roselabs.io/sage.js"></script>
+<script src="https://cdn.roselabs.io/sage-chat.min.js"></script>
 ```
 
-## Quick Start (Widget)
+## Quick Start (Live Chat Widget)
 
 ```html
-<!-- Add the widget script -->
-<script src="https://cdn.roselabs.io/sage.js"
-        data-sage-team-id="your-team-id"
+<!-- Add the live chat widget script -->
+<script src="https://cdn.roselabs.io/sage-chat.min.js"
+        data-sage-api-key="sk_sage_..."
         data-sage-position="bottom-right">
 </script>
 ```
@@ -33,21 +34,23 @@ Or use the CDN:
 ## Quick Start (JavaScript)
 
 ```javascript
-import { Sage } from '@roselabs-io/sage';
+import { SageChat } from '@roselabs-io/sage/chat';
 
-const sage = new Sage({
-  apiKey: process.env.SAGE_API_KEY,
-});
-
-// Create a ticket
-await sage.createTicket({
-  subject: 'Help with my order',
-  message: 'I need help tracking my order #12345',
-  customer: {
-    email: 'customer@example.com',
+// Initialize the chat widget
+const chat = SageChat.init({
+  apiKey: 'sk_sage_...',
+  primaryColor: '#6366f1',
+  visitor: {
+    email: 'user@example.com',
     name: 'John Doe',
   },
 });
+
+// Control programmatically
+chat.open();
+chat.send('Hello!');
+chat.identify({ email: 'new@email.com' });
+chat.close();
 ```
 
 ## Links
