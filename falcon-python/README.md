@@ -7,6 +7,8 @@ Error tracking and uptime monitoring for Python applications.
 | Example | Description |
 |:--------|:------------|
 | [fastapi-basic](./fastapi-basic) | FastAPI integration with auto-registration |
+| [cron-monitoring](./cron-monitoring) | Cron job heartbeat monitoring |
+| [breadcrumbs](./breadcrumbs) | Breadcrumb capture (HTTP, SQLAlchemy, context managers) |
 
 ## Installation
 
@@ -124,6 +126,37 @@ from falcon_sdk import cron_job
 def cleanup():
     # Your job logic here
     pass
+```
+
+## Breadcrumbs
+
+Capture a trail of events leading up to errors:
+
+```python
+from falcon_sdk import (
+    install_breadcrumb_integrations,
+    add_breadcrumb,
+    breadcrumb_scope,
+)
+
+# Auto-capture HTTP requests, logs, and DB queries
+install_breadcrumb_integrations(
+    http=True,       # httpx, requests, aiohttp, urllib3
+    logging_handler=True,
+    sqlalchemy=True,  # Database query breadcrumbs
+)
+
+# Manual breadcrumbs
+add_breadcrumb(
+    type="click",
+    message="User clicked checkout",
+    data={"product_id": "123"},
+)
+
+# Scope breadcrumbs with context managers
+with breadcrumb_scope("checkout", category="business"):
+    process_payment()
+    update_inventory()
 ```
 
 ## Links

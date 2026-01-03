@@ -1,0 +1,12 @@
+{
+  "name": "falcon-sourcemaps-example",
+  "version": "1.0.0",
+  "description": "Example showing how to upload source maps to Falcon",
+  "main": "upload-sourcemaps.js",
+  "scripts": {
+    "upload": "node upload-sourcemaps.js"
+  },
+  "dependencies": {
+    "@roselabs-io/falcon": "^0.1.0"
+  }
+}
